@@ -32,14 +32,10 @@ public class InputFileCreator {
 	}
 	
 	// hem dna string için hem de kmer üretmek için kullanacağız
-	private String createRandomString(int k) {
-		String chars= "AGCT";  
-		Random randomIndex= new Random();  
+	public String createRandomString(int k) { 
 		StringBuilder randomString= new StringBuilder(); 
-		int index;
 		while (randomString.length() < k) { 
-            index = randomIndex.nextInt(chars.length());
-            randomString.append(chars.charAt(index));
+            randomString.append(createRandomChar());
         }
 		return randomString.toString();
 	}
@@ -77,7 +73,7 @@ public class InputFileCreator {
 	private String insertMutation(String dnaString, String mutatedKMer) {
 		StringBuilder sb = new StringBuilder(dnaString);
 		Random randomIndex= new Random();
-		int index = randomIndex.nextInt(dnaString.length());
+		int index = randomIndex.nextInt(dnaString.length()-mutatedKMer.length());
 
 		// String coloredKMer = "\033[31m" + mutatedKMer + "\033[0m"; // Red color
 		// sb.insert(index, coloredKMer);
