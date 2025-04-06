@@ -22,7 +22,6 @@ public abstract class Algorithm {
 	}
 	
 	
-	public abstract void setMotifs();
 	public abstract void run();
 	
 	
@@ -51,6 +50,17 @@ public abstract class Algorithm {
 	}
 
 	
+	
+	// set motifs
+	// RandomizedMotifSearch will use this in every iteration
+	// GibbsSampler will use this in first only one time
+	public void setMotifs() {
+		this.motifs.clear();
+		int len = this.dna.size();
+		for (String line : dna) {
+			motifs.add(this.selectMotifFromLine(line, this.k));
+		}
+	}
 	
 	private void updateCounts() {
 		// use this.motifs
