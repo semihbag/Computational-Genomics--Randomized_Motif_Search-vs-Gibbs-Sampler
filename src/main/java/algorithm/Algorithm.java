@@ -8,9 +8,9 @@ public abstract class Algorithm {
 	
 	private int k;
 	private ArrayList<String> dna = new ArrayList<>();
-	private ArrayList<String> motifs;
-	private ArrayList<String> bestMotifs;
-	private ArrayList<ArrayList<Integer>> counts;
+	private ArrayList<String> motifs = new ArrayList<>();
+	private ArrayList<String> bestMotifs = new ArrayList<>();
+	private int[][] counts;
 	private ArrayList<ArrayList<Double>> profile;
 	private boolean needNormalize = false;
 	private int numberOfIteration;
@@ -18,6 +18,7 @@ public abstract class Algorithm {
 	public Algorithm(int k) {
 		this.k = k;
 		this.numberOfIteration = 0;
+		this.counts = new int[4][k];
 		setDna();
 	}
 	
@@ -50,7 +51,6 @@ public abstract class Algorithm {
 	}
 
 	
-	
 	// set motifs
 	// RandomizedMotifSearch will use this in every iteration
 	// GibbsSampler will use this in first only one time
@@ -62,10 +62,30 @@ public abstract class Algorithm {
 		}
 	}
 	
+	
+	// it counts the characters
+	// i: index of char in kmers (columns)
+	// j: index of kmers (rows)
+	// t: tpye of char(A,C,T,G)
 	private void updateCounts() {
-		// use this.motifs
-		// update this.counts
-		// set this.needNormalize
+		int i = 0;
+		for (i = 0; i < this.k; i++) {
+			for (String motif : this.motifs) {
+				char nucleotide = motif.charAt(i);
+				int index = getNucleotideIndex(nucleotide);
+				this.counts[index][i]++;
+			}
+		}
+	}
+	
+	private int getNucleotideIndex(char c) {
+	    switch (c) {
+	        case 'A': return 0;
+	        case 'C': return 1;
+	        case 'T': return 2;
+	        case 'G': return 3;
+	        default: return -1; 
+	    }
 	}
 	
 	private void normalizeCounts() {
