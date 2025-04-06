@@ -44,21 +44,26 @@ public class InputFileCreator {
 			index = randomIndex.nextInt(kMer.length());
 			if(markedIndexes.add(index)){  //eger yeni bir index geldi ise yani yeni bir konum belirlendi
 				char currentChar= kMer.charAt(index);
-				char mutaitedChar;
+				char mutatedChar;
                 do{
-					mutaitedChar= createRandomChar();
+					mutatedChar= createRandomChar();
 					//karakteri değiştir dönen karakter!= current ise biter döngü
-				}while(mutaitedChar == currentChar);
-				sb.setCharAt(index, mutaitedChar);
+				}while(mutatedChar == currentChar);
+				sb.setCharAt(index, mutatedChar);
 			}
 		}
 		System.out.println(sb.toString());
 		return sb.toString();
 	}
 	
-	private String insertMutation(String dnaString, String mutatedKMer) {
-		// 
-		return dnaString;
+	public String insertMutation(String dnaString, String mutatedKMer) {
+		StringBuilder sb = new StringBuilder(dnaString);
+		Random randomIndex= new Random();
+		int index = randomIndex.nextInt(dnaString.length());
+		sb.insert(index, mutatedKMer);
+		System.out.print(sb.toString());
+		
+		return sb.toString();
 	}
 	
 	
