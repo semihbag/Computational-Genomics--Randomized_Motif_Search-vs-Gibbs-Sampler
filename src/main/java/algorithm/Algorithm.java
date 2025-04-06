@@ -11,7 +11,7 @@ public abstract class Algorithm {
 	private ArrayList<String> motifs = new ArrayList<>();
 	private ArrayList<String> bestMotifs = new ArrayList<>();
 	private int[][] counts;
-	private ArrayList<ArrayList<Double>> profile;
+	private double[][] profile;
 	private boolean needNormalize = false;
 	private int numberOfIteration;
 	
@@ -19,6 +19,7 @@ public abstract class Algorithm {
 		this.k = k;
 		this.numberOfIteration = 0;
 		this.counts = new int[4][k];
+		this.profile = new double[4][k];
 		resetCounts();
 		setDna();
 	}
@@ -117,14 +118,29 @@ public abstract class Algorithm {
 				this.counts[i][j]++;
 			}
 		}
+	}
+	
+	
+	// calculate profile matrix
+	// according to needNormalize, 2x 
+	private void calculateProfile() {
+		int total = (this.needNormalize)? this.dna.size() : this.dna.size() * 2;
+		
+		int i, j, frequency = 0;
+		double res = 0.0;
+		
+		for (i = 0; i < 4; i++) {
+			for (j = 0; j < this.k; j++) {
+				frequency = this.counts[i][j];
+				res = (double) frequency / total;
+				this.profile[i][j] = res;
+			}
+		}
+		
 		this.needNormalize = false;
 	}
 	
 	
-	private void calculateProfile() {
-		// use this.motifs
-		// update this.profile matrix
-	}
 	
 	private String findMostProbableKMer (String line, int k) {
 		// use this.profile
