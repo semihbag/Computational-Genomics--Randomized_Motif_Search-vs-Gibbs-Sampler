@@ -4,7 +4,7 @@ public class RandomizedMotifSearch extends Algorithm{
 
 	public RandomizedMotifSearch(int k) {
 		super(k);
-		// TODO Auto-generated constructor stub
+		System.out.println("RandomizedMotifSearch has been created");
 	}
 
 	@Override
