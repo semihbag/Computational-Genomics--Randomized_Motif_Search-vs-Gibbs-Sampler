@@ -25,6 +25,8 @@ public abstract class Algorithm {
 	public abstract void setMotifs();
 	public abstract void run();
 	
+	
+	// when an algorithm created, set the dna lines from input file
 	private void setDna() {
 		try {
 			File file = new File("../input.txt");
@@ -41,11 +43,15 @@ public abstract class Algorithm {
 		}
 	}
 
-	private String selectMotifFromLine(String line, int k) {
-		
-		return null;
+	
+	// select motif from a line randomly
+	public String selectMotifFromLine(String line, int k) {
+		int r = (int)(Math.random() * (line.length() + 1 - k));
+		return line.substring(r, r + k);
 	}
 
+	
+	
 	private void updateCounts() {
 		// use this.motifs
 		// update this.counts
