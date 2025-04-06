@@ -7,11 +7,6 @@ public class GibbsSampler extends Algorithm {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public void setMotifs() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void run() {
