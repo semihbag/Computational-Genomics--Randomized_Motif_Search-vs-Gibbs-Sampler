@@ -27,6 +27,12 @@ public class InputFileCreator {
 		return randomString.toString();
 	}
 	
+	private char createRandomChar() {
+		String chars = "AGCT";
+		Random random = new Random();
+		return chars.charAt(random.nextInt(chars.length()));
+	}
+	
 	public String mutation(String kMer, int n) {
 		//
 		//nextInt(kmer.lengt)
