@@ -1,11 +1,13 @@
 package algorithm;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public abstract class Algorithm {
 	
 	private int k;
-	private ArrayList<String> dna;
+	private ArrayList<String> dna = new ArrayList<>();
 	private ArrayList<String> motifs;
 	private ArrayList<String> bestMotifs;
 	private ArrayList<ArrayList<Integer>> counts;
@@ -24,11 +26,22 @@ public abstract class Algorithm {
 	public abstract void run();
 	
 	private void setDna() {
-		// 
+		try {
+			File file = new File("../input.txt");
+			Scanner s = new Scanner(file);
+			
+			while (s.hasNextLine()) {
+				this.dna.add(s.nextLine());
+			}
+			s.close();
+		}
+		catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	private String selectMotifFromLine(String line, int k) {
-		// 
+		
 		return null;
 	}
 
