@@ -11,11 +11,12 @@ public abstract class Algorithm {
 	private ArrayList<ArrayList<Integer>> counts;
 	private ArrayList<ArrayList<Double>> profile;
 	private boolean needNormalize = false;
+	private int numberOfIteration;
 	
 	public Algorithm(int k) {
 		this.k = k;
+		this.numberOfIteration = 0;
 		setDna();
-		
 	}
 	
 	
@@ -58,5 +59,18 @@ public abstract class Algorithm {
 		return 0;
 	}
 
+	private void addIteration() {
+		setNumberOfIteration(getNumberOfIteration() + 1);
+	}
+
+	public int getNumberOfIteration() {
+		return numberOfIteration;
+	}
+
+	public void setNumberOfIteration(int numberOfIteration) {
+		this.numberOfIteration = numberOfIteration;
+	}
+	
+	
 	
 }
