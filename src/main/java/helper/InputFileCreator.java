@@ -1,29 +1,46 @@
 package helper;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
 public class InputFileCreator {
 	
-	public boolean createRandomInputFile (int k) {
+	public boolean createRandomInputFile (int k) throws IOException {
 		// k is kmer lenght
 		// to do
+		File file = new File("input.txt");
+		FileWriter writer = new FileWriter(file);
+		BufferedWriter bufferedWriter = new BufferedWriter(writer);
+		String nineMer= createRandomString(k); //create key with given k lenght
+		for(int i=0; i<10; i++){  //for 10 lines
+			String line= createRandomString(500);  // lenght of line is 500
+			String mutatedStr= mutation(nineMer,4); //key mutated for every line
+			insertMutation(line, mutatedStr);  //insert mutatedkey to actually line
+			bufferedWriter.write(line);
+			bufferedWriter.newLine();
+		}
 
-		return false;
+		bufferedWriter.close();
+        return file.exists();
 	}
 	
 	// hem dna string için hem de kmer üretmek için kullanacağız
 	private String createRandomString(int k) {
-		String chars= "AGCT";
-		Random randomIndex= new Random();
+		String chars= "AGCT";  
+		Random randomIndex= new Random();  
 		StringBuilder randomString= new StringBuilder(); 
 		int index;
 		while (randomString.length() < k) { 
             index = randomIndex.nextInt(chars.length());
             randomString.append(chars.charAt(index));
         }
-		System.out.println(randomString.toString());
 		return randomString.toString();
 	}
 	
@@ -36,6 +53,7 @@ public class InputFileCreator {
 	public String mutation(String kMer, int n) {
 		//
 		//nextInt(kmer.lengt)
+
 		StringBuilder sb = new StringBuilder(kMer);
 		Random randomIndex= new Random();
 		Set<Integer> markedIndexes = new HashSet<>(); //degisen index tekrar degismesin diye hashset kullanildi
@@ -52,17 +70,20 @@ public class InputFileCreator {
 				sb.setCharAt(index, mutatedChar);
 			}
 		}
-		System.out.println(sb.toString());
+
 		return sb.toString();
 	}
 	
-	public String insertMutation(String dnaString, String mutatedKMer) {
+	private String insertMutation(String dnaString, String mutatedKMer) {
 		StringBuilder sb = new StringBuilder(dnaString);
 		Random randomIndex= new Random();
 		int index = randomIndex.nextInt(dnaString.length());
-		sb.insert(index, mutatedKMer);
-		System.out.print(sb.toString());
+
+		// String coloredKMer = "\033[31m" + mutatedKMer + "\033[0m"; // Red color
+		// sb.insert(index, coloredKMer);
+		//System.out.println(sb.toString());
 		
+		sb.insert(index, mutatedKMer);
 		return sb.toString();
 	}
 	
