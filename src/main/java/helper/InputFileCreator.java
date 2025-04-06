@@ -9,7 +9,10 @@ public class InputFileCreator {
 		return false;
 	}
 	
-	private void mutation(ArrayList<Character> k_mer, int n) {
+	private ArrayList<Character> mutation(ArrayList<Character> k_mer, int n) {
 		//
+		return k_mer;
 	}
+	
+	
 }
