@@ -19,6 +19,7 @@ public abstract class Algorithm {
 		this.k = k;
 		this.numberOfIteration = 0;
 		this.counts = new int[4][k];
+		resetCounts();
 		setDna();
 	}
 	
@@ -43,6 +44,15 @@ public abstract class Algorithm {
 		}
 	}
 
+	
+	// fill counts matrix by zero initially
+	private void resetCounts() {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < this.k; j++) {
+				this.counts[i][j] = 0;
+			}
+		}
+	}
 	
 	// select motif from a line randomly
 	public String selectMotifFromLine(String line, int k) {
