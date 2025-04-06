@@ -4,14 +4,25 @@ import java.util.ArrayList;
 
 public class InputFileCreator {
 	
-	public boolean createRandomInputFile () {
+	public boolean createRandomInputFile (int k) {
+		// k is kmer lenght
 		// to do
 		return false;
 	}
 	
-	private ArrayList<Character> mutation(ArrayList<Character> k_mer, int n) {
+	private String createRandomString(int k) {
+		// hem dna string için hem de kmer üretmek için kullanacağız
+		return null;
+	}
+	
+	private String mutation(String kMer, int n) {
 		//
-		return k_mer;
+		return null;
+	}
+	
+	private String insertMutation(String dnaString, String mutatedKMer) {
+		// 
+		return dnaString;
 	}
 	
 	
