@@ -77,8 +77,9 @@ public abstract class Algorithm {
 	// i: index of char in kmers (columns)
 	// j: index of kmers (rows)
 	// t: tpye of char(A,C,T,G)
+	// it sets needNormalize 
 	private void updateCounts() {
-		int i,j = 0;
+		int i, j = 0;
 		for (i = 0; i < this.k; i++) {
 			for (String motif : this.motifs) {
 				char nucleotide = motif.charAt(i);
@@ -107,11 +108,18 @@ public abstract class Algorithm {
 	    }
 	}
 	
+	
+	// normalize the count matrix by adding 1 to every cells
 	private void normalizeCounts() {
-		// use this.counts
-		// update this.counts matrix
-		// set needNormalize flag false at the end
+		int i, j = 0;
+		for (i = 0; i < 4; i++) {
+			for (j = 0; j < this.k; j++) {
+				this.counts[i][j]++;
+			}
+		}
+		this.needNormalize = false;
 	}
+	
 	
 	private void calculateProfile() {
 		// use this.motifs
