@@ -124,7 +124,7 @@ public abstract class Algorithm {
 	// calculate profile matrix
 	// according to needNormalize, 2x 
 	private void calculateProfile() {
-		int total = (this.needNormalize)? this.dna.size() : this.dna.size() * 2;
+		int total = (this.needNormalize)? this.motifs.size() : this.motifs.size() * 2;
 		
 		int i, j, frequency = 0;
 		double res = 0.0;
@@ -142,7 +142,7 @@ public abstract class Algorithm {
 	
 	
 	
-	private String findMostProbableKMer (String line, int k) {
+	private String findMostProbableKMer(String line, int k) {
 		// use this.profile
 		return null;
 	}
