@@ -142,9 +142,37 @@ public abstract class Algorithm {
 	
 	
 	
-	private String findMostProbableKMer(String line, int k) {
-		// use this.profile
-		return null;
+	private String findMostProbableKMer(String line, int n) {
+
+		double bestProbabilit = 0.0;
+		double probability = 1.0;
+		String bestKMer = "";
+		String kMer = "";
+		char c = ' ';
+		
+		int i = 0;
+		int j = 0;
+		int index;
+		int len = line.length() - this.k + 1;
+		
+		for(i = 0; i < len; i++) {
+			kMer = line.substring(i, i + this.k);
+			
+			probability = 1.0;
+			for(j = 0; j < this.k; j++) {
+				c = kMer.charAt(j);
+				index = getNucleotideIndex(c);
+				probability *= this.profile[index][j];
+			}
+			
+			if (probability > bestProbabilit) {
+				bestKMer = kMer;
+				bestProbabilit = probability;
+			}
+
+		}
+		
+		return bestKMer;
 	}
 	
 	private int calculateScore(ArrayList<String> motifs) {
