@@ -36,6 +36,7 @@ public abstract class Algorithm {
 			s.close();
 		}
 		catch (Exception e) {
+			System.err.println("An error occured in Algorithm/setDna()");
 			System.out.println(e);
 		}
 	}
