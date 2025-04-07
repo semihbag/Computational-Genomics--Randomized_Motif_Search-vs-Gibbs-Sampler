@@ -15,7 +15,7 @@ public class InputFileCreator {
 	public boolean createRandomInputFile (int k) throws IOException {
 		// k is kmer lenght
 		// to do
-		File file = new File("input.txt");
+		File file = new File("src/main/java/input.txt");
 		FileWriter writer = new FileWriter(file);
 		BufferedWriter bufferedWriter = new BufferedWriter(writer);
 		String nineMer= createRandomString(k); //create key with given k lenght
