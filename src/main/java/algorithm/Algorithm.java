@@ -9,9 +9,9 @@ import java.util.Scanner;
 
 public abstract class Algorithm {
 	
-	private int k;
+	protected int k;
 	private ArrayList<String> dna = new ArrayList<>();
-	private ArrayList<String> motifs = new ArrayList<>();
+	public ArrayList<String> motifs = new ArrayList<String>();
 	private ArrayList<String> bestMotifs = new ArrayList<>();
 	private int[][] counts;
 	private double[][] profile;
@@ -25,11 +25,35 @@ public abstract class Algorithm {
 		this.profile = new double[4][k];
 		resetCounts();
 		setDna();
+		setMotifs();
+		System.out.println(this.motifs);
 	}
 	
 	
-	public abstract void run();
+	public abstract void updateMotifs();
 	
+	public void run() {
+		this.bestMotifs = this.motifs;
+		while (true) {
+			updateCounts();
+			calculateProfile();
+			updateMotifs();
+			System.out.println(this.motifs);
+			double currentScore = calculateScore(bestMotifs);
+			double newScore = calculateScore(motifs);
+			System.out.println("new " + newScore);
+			System.out.println("cur " + currentScore);
+			System.out.println("-");
+			if (newScore < currentScore) {
+				this.bestMotifs = this.motifs;
+			}
+			else {
+				System.out.println("---------------------");
+				break;
+			}
+		}
+	}
+
 	
 	// when an algorithm created, set the dna lines from input file
 	private void setDna() {
@@ -59,7 +83,7 @@ public abstract class Algorithm {
 	}
 	
 	// select motif from a line randomly
-	public String selectMotifFromLine(String line, int k) {
+	private String selectMotifFromLine(String line, int k) {
 		int r = (int)(Math.random() * (line.length() + 1 - k));
 		return line.substring(r, r + k);
 	}
@@ -145,7 +169,7 @@ public abstract class Algorithm {
 	
 	
 	
-	private String findMostProbableKMer(String line, int n) {
+	protected String findMostProbableKMer(String line) {
 
 		double bestProbabilit = 0.0;
 		double probability = 1.0;

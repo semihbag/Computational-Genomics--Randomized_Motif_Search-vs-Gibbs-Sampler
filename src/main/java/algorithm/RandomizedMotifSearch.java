@@ -8,9 +8,11 @@ public class RandomizedMotifSearch extends Algorithm{
 	}
 
 	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
+	public void updateMotifs() {
+		int i = 0;
+		for (i = 0; i < this.motifs.size(); i++) {
+			this.motifs.set(i, findMostProbableKMer(this.motifs.get(i)));
+		}
 	}
-
+	
 }
