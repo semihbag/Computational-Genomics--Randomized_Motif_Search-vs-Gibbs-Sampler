@@ -12,6 +12,8 @@ import java.util.Set;
 
 public class InputFileCreator {
 	
+	public String kmerFinal;
+	
 	public boolean createRandomInputFile (int k) throws IOException {
 		// k is kmer lenght
 		// to do
@@ -19,11 +21,16 @@ public class InputFileCreator {
 		FileWriter writer = new FileWriter(file);
 		BufferedWriter bufferedWriter = new BufferedWriter(writer);
 		String nineMer= createRandomString(k); //create key with given k lenght
+
+		String coloredKMer = "\033[31m" + nineMer + "\033[0m"; // Red color
+		System.out.println("Generated kmer: " + nineMer);
+		
+		kmerFinal = "Generated kmer: " + coloredKMer;
 		for(int i=0; i<10; i++){  //for 10 lines
 			String line= createRandomString(500);  // lenght of line is 500
 			String mutatedStr= mutation(nineMer,4); //key mutated for every line
-			insertMutation(line, mutatedStr);  //insert mutatedkey to actually line
-			bufferedWriter.write(line);
+			String a = insertMutation(line, mutatedStr);  //insert mutatedkey to actually line
+			bufferedWriter.write(a);
 			bufferedWriter.newLine();
 		}
 

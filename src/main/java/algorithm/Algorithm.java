@@ -7,53 +7,83 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.w3c.dom.css.CSSRule;
+
 public abstract class Algorithm {
 	
 	protected int k;
-	private ArrayList<String> dna = new ArrayList<>();
+	private double bestScore = Double.MAX_VALUE;
+	private double totalScore = 0.0;
+	private long duration;
+	protected ArrayList<String> dna = new ArrayList<>();
 	public ArrayList<String> motifs = new ArrayList<String>();
 	private ArrayList<String> bestMotifs = new ArrayList<>();
 	private int[][] counts;
 	private double[][] profile;
 	private boolean needNormalize = false;
 	private int numberOfIteration;
+	private int sameScoreCount = 0;
+	private String consensus;
+	private String name;
+	private String result;
 	
-	public Algorithm(int k) {
+	public Algorithm(int k, String name) {
 		this.k = k;
+		this.name = name;
 		this.numberOfIteration = 0;
 		this.counts = new int[4][k];
 		this.profile = new double[4][k];
 		resetCounts();
 		setDna();
 		setMotifs();
-		System.out.println(this.motifs);
 	}
 	
 	
 	public abstract void updateMotifs();
 	
 	public void run() {
-		this.bestMotifs = this.motifs;
+		long startTime = System.nanoTime();
+
+		updateBestMotifs();
 		while (true) {
 			updateCounts();
 			calculateProfile();
 			updateMotifs();
-			System.out.println(this.motifs);
+			
 			double currentScore = calculateScore(bestMotifs);
 			double newScore = calculateScore(motifs);
-			System.out.println("new " + newScore);
-			System.out.println("cur " + currentScore);
-			System.out.println("-");
+			
+			totalScore += newScore;
+			numberOfIteration++;
+			
 			if (newScore < currentScore) {
-				this.bestMotifs = this.motifs;
+				bestScore = newScore;
+				sameScoreCount = 0;
+				updateBestMotifs();
 			}
 			else {
-				System.out.println("---------------------");
-				break;
+				sameScoreCount++;
 			}
+			
+		    if (sameScoreCount >= 10) {
+		        break;
+		    }
 		}
+		
+		long endTime = System.nanoTime();
+		this.duration = endTime - startTime;
+		this.result = printResults();
 	}
 
+	
+	private void updateBestMotifs() {
+		int i = 0;
+		this.bestMotifs.clear();
+		for (i = 0; i < this.motifs.size(); i++ ) {
+			String motif = this.motifs.get(i);
+			this.bestMotifs.add(motif);
+		}
+	}
 	
 	// when an algorithm created, set the dna lines from input file
 	private void setDna() {
@@ -107,6 +137,7 @@ public abstract class Algorithm {
 	// t: tpye of char(A,C,T,G)
 	// it sets needNormalize 
 	private void updateCounts() {
+		resetCounts();
 		int i, j = 0;
 		for (i = 0; i < this.k; i++) {
 			for (String motif : this.motifs) {
@@ -136,6 +167,15 @@ public abstract class Algorithm {
 	    }
 	}
 	
+	private char getNucleotideFromIndex(int index) {
+	    switch (index) {
+	        case 0: return 'A';
+	        case 1: return 'C';
+	        case 2: return 'G';
+	        case 3: return 'T';
+	        default: return 'N'; // bilinmeyen durum için
+	    }
+	}
 	
 	// normalize the count matrix by adding 1 to every cells
 	private void normalizeCounts() {
@@ -151,7 +191,11 @@ public abstract class Algorithm {
 	// calculate profile matrix
 	// according to needNormalize, 2x 
 	private void calculateProfile() {
-		int total = (this.needNormalize)? this.motifs.size() : this.motifs.size() * 2;
+		int total = this.motifs.size();
+		if (this.needNormalize) {
+			normalizeCounts();
+			total = total * 2;
+		}
 		
 		int i, j, frequency = 0;
 		double res = 0.0;
@@ -184,14 +228,13 @@ public abstract class Algorithm {
 		
 		for(i = 0; i < len; i++) {
 			kMer = line.substring(i, i + this.k);
-			
 			probability = 1.0;
 			for(j = 0; j < this.k; j++) {
 				c = kMer.charAt(j);
 				index = getNucleotideIndex(c);
-				probability *= this.profile[index][j];
+				probability =  probability * this.profile[index][j];
 			}
-			
+
 			if (probability > bestProbabilit) {
 				bestKMer = kMer;
 				bestProbabilit = probability;
@@ -227,6 +270,51 @@ public abstract class Algorithm {
         return totalScore;
 	}
 
+	public String getConsensusFromCounts() {
+	    StringBuilder consensus = new StringBuilder();
+
+	    for (int j = 0; j < k; j++) {
+	        int maxCount = -1;
+	        int maxIndex = -1;
+
+	        for (int i = 0; i < 4; i++) {
+	            if (counts[i][j] > maxCount) {
+	                maxCount = counts[i][j];
+	                maxIndex = i;
+	            }
+	        }
+
+	        char nucleotide = getNucleotideFromIndex(maxIndex);
+	        consensus.append(nucleotide);
+	    }
+
+	    this.consensus = consensus.toString(); // optional: saklamak için
+	    return consensus.toString();
+	}
+	
+	private String printMotifs() {
+		String str = "";
+		str += "==========Motifs==========\n";
+		for (String motif : this.motifs) {
+			str += motif + "\n";
+		}
+		str += "==========================\n";
+		return str;
+	}
+	        
+	public String printResults() {
+		String res = "";
+		res += "========================== k: " + this.k + " ==========================\n";
+		res += "Algorithm Type: " + this.name + "\n";
+		res += "Execution time: " + (duration / 1_000_000.0) + " ms\n";
+		res += "Best Score: " + this.bestScore + "\n";
+		res += "Avarage Score: " + (this.totalScore / numberOfIteration) + "\n";
+		res += "Best Motif:\n";
+		res += printMotifs();
+		res += "Consensus String: " + getConsensusFromCounts() + "\n";
+		
+		return res;
+	}
 	
 	
 	private void addIteration() {
