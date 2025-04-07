@@ -2,6 +2,9 @@ package algorithm;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public abstract class Algorithm {
@@ -175,11 +178,33 @@ public abstract class Algorithm {
 		return bestKMer;
 	}
 	
+	
+	// calculating the score
 	private int calculateScore(ArrayList<String> motifs) {
-		//
-		return 0;
+        int t = motifs.size();
+        int totalScore = 0;
+
+        for (int i = 0; i < this.k; i++) {
+            Map<Character, Integer> count = new HashMap<>();
+            count.put('A', 0);
+            count.put('C', 0);
+            count.put('G', 0);
+            count.put('T', 0);
+
+            for (String motif : motifs) {
+                char c = motif.charAt(i);
+                count.put(c, count.get(c) + 1);
+            }
+
+            int maxCount = Collections.max(count.values());
+            totalScore += (t - maxCount);
+        }
+
+        return totalScore;
 	}
 
+	
+	
 	private void addIteration() {
 		setNumberOfIteration(getNumberOfIteration() + 1);
 	}
